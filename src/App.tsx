@@ -1,24 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
+import { searchCompanies, SearchResponse } from './api'; // Import SearchResponse from your API file
+import { CompanySearch } from "./company"; // Import CompanySearch type
 import './App.css';
 
+import CardList from './components/CardList/CardList';
+import Search from './components/Search/Search';
+
 function App() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<CompanySearch[]>([]); // Use CompanySearch type here
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+const handleClick = async () => {
+  const data = await searchCompanies(query);
+
+  if (typeof data === "string") {
+    // 错误信息
+    setError(data);
+    setResults([]);
+  } else {
+    // 直接是数组
+    setError(null);
+    setResults(data);
+    console.log("搜索结果:", data);
+  }
+};
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Search />
+      <input type="text" value={query} onChange={handleChange} />
+      <button onClick={handleClick}>Search</button>
+      <CardList  /> {/* Pass results to CardList */}
     </div>
   );
 }
