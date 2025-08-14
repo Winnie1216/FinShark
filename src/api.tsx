@@ -26,7 +26,7 @@ export type SearchResponse = CompanySearch[];
 export const searchCompanies = async (query: string) => {
   try {
     const response = await axios.get<SearchResponse>(
-      `https://financialmodelingprep.com/api/v3/search?query=${query}&limit=10&exchange=NASDAQ&apikey=${process.env.REACT_APP_API_KEY}`
+      `https://financialmodelingprep.com/stable/search-symbol?query=${query}&apikey=kKgvavviMVw6mLK3e7VSu3fdcppDGuiO`
     );
     return response.data; // 直接就是 CompanySearch[]
   } catch (error: unknown) {
@@ -118,7 +118,7 @@ export const getCompData = async (query: string) => {
 export const getTenK = async (query: string) => {
   try {
     const data = await axios.get<CompanyTenK[]>(
-      `https://financialmodelingprep.com/api/v3/sec_filings/${query}?type=10-K&page=0&apikey=${process.env.REACT_APP_API_KEY}`
+      `https://financialmodelingprep.com/stable/company-screener?apikey=${process.env.REACT_APP_API_KEY}`
     );
     return data;
   } catch (error: any) {
